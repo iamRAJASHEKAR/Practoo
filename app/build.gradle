@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.robinhood.ticker:ticker:2.0.0'
     // RxJava
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
 

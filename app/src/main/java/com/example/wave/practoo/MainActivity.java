@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.robinhood.ticker.TickerUtils;
+import com.robinhood.ticker.TickerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private CompositeDisposable disposable = new CompositeDisposable();
     TextView view, view2;
     int japam, old;
+    TickerView tickerView;
+    int num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +44,18 @@ public class MainActivity extends AppCompatActivity {
         view = findViewById(R.id.text1);
         view2 = findViewById(R.id.text2);
         japam = 150;
-
+        tickerView = findViewById(R.id.ticker);
+        tickerView.setCharacterLists(TickerUtils.provideAlphabeticalList());
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 japam = japam - 1;
+
                 view2.setText(String.valueOf(japam));
 
             }
         });
-
+        runner();
 
         disposable.add(getNotesObservable().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .map(new io.reactivex.functions.Function<Note, Note>() {
@@ -58,6 +66,23 @@ public class MainActivity extends AppCompatActivity {
                         return note;
                     }
                 }).subscribeWith(getNotesObserver()));
+    }
+
+    public void runner() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                japam = japam - 1;
+                String va = String.valueOf(japam);
+                if (va.contains("0")) {
+                    Log.e("markangel", "check for zero");
+                }
+                tickerView.setText(String.valueOf(japam));
+
+                handler.postDelayed(this, 3 * 1000);
+            }
+        }, 3 * 100);
     }
 
     private DisposableObserver<Note> getNotesObserver() {
@@ -111,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
         int id;
         String note;
 
-        public Note(int ids, String notes)
-        {
+        public Note(int ids, String notes) {
             this.id = ids;
             this.note = notes;
         }
@@ -160,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             japam = japam - 1;
             view2.setText(String.valueOf(japam));
-
+//hello
         }
         return true;
     }
