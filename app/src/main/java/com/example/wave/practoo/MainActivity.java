@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         view = findViewById(R.id.text1);
         view2 = findViewById(R.id.text2);
         japam = 150;
-        tickerView = findViewById(R.id.ticker);
+    //    tickerView = findViewById(R.id.ticker);
         tickerView.setCharacterLists(TickerUtils.provideAlphabeticalList());
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             japam = japam - 1;
             view2.setText(String.valueOf(japam));
-//hello
+//hello from madhura 
         }
         return true;
     }
